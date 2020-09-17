@@ -6,8 +6,8 @@
 body {
   /* height: 200px;
   background: white; */
-  height: 99vh;
-  width:  99vw;
+  /* height: 99vh;
+  width:  99vw; */
   background: #f7f7ff;
 
 }
@@ -24,13 +24,15 @@ body {
 #container {
   height: auto;
   width: 100%;
-  border: 1px solid rgba(0,0,0,.2);
-  box-shadow: 0 1px 1px 0 rgba(0,0,0,.15);
+  /* border: 1px solid rgba(0,0,0,.2);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,.15); */
   margin: auto;
   margin-top: 35px;
-  background: white;
-  padding: 30px;
+  /* background: white; */
+  padding: 10px 0;
   display: flex;
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
 }
 /* #container .timeAxis {
   height: 100%;
@@ -56,6 +58,19 @@ text {
   font-size: 20px;
 }
 
+.tooltip {
+  position: absolute;			
+  text-align: center;			
+  width: 60px;					
+  height: 28px;					
+  padding: 2px;				
+  font: 12px sans-serif;		
+  background: lightsteelblue;	
+  border: 0px;		
+  border-radius: 8px;			
+  pointer-events: none;		
+}
+
 .comp {
   border-radius: 25px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
@@ -65,7 +80,13 @@ text {
   margin-right: 10px;
   margin-top: 5px;
   vertical-align: bottom;
-  background: blue
+  background: blue;
+  cursor: pointer;
+  transition: box-shadow ease-in-out .15s, transform ease-in-out .15s;
+}
+.comp:hover {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 23%);
+  transform: scale(1.05)
 }
 
 .time-header {
@@ -77,24 +98,46 @@ text {
 .dummy {
   color: gray;
   width: 100% !important;
+  background: none;
 }
 
 .comp .compText {
-  font-size: 12px;
   color: white;
   /* text-align: center; */
   text-overflow: ellipsis;
   overflow: hidden;
-
-
-  /* width: 80%; */
-  /* text-overflow: ellipsis; */
-  /* max-height: 80%; */
-
+  max-height: 80%;
+  text-align: center;
+  letter-spacing: 0.3px;
+  width: 80%;
+  text-overflow: ellipsis; 
+   max-height: 80%;
+   font-size: 12px;
+   font-weight: 400;
 }
 
 .time-group {
   margin: 30px 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(241 241 241 / 42%);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /*# sourceMappingURL=style.css.map */
