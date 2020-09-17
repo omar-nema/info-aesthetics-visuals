@@ -22,7 +22,7 @@ body {
 }
 
 #container {
-  height: 2500px;
+  height: auto;
   width: 100%;
   border: 1px solid rgba(0,0,0,.2);
   box-shadow: 0 1px 1px 0 rgba(0,0,0,.15);
@@ -32,13 +32,14 @@ body {
   padding: 30px;
   display: flex;
 }
-#container .timeAxis {
+/* #container .timeAxis {
   height: 100%;
   width: 100px;
-}
+} */
 #container .canvas {
   flex-grow: 1;
-  height: 100%
+  height: 100%;
+  flex-basis: 100%;
 }
 
 text {
@@ -55,24 +56,45 @@ text {
   font-size: 20px;
 }
 
-.complaint {
-  position: absolute;
+.comp {
   border-radius: 25px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-right: 10px;
+  margin-top: 5px;
+  vertical-align: bottom;
+  background: blue
 }
 
-.complaint .compText {
+.time-header {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.dummy {
+  color: gray;
+  width: 100% !important;
+}
+
+.comp .compText {
   font-size: 12px;
   color: white;
-  width: 80%;
-  text-align: center;
+  /* text-align: center; */
   text-overflow: ellipsis;
-  /* text-overflow: ellipsis; */
-  max-height: 80%;
   overflow: hidden;
+
+
+  /* width: 80%; */
+  /* text-overflow: ellipsis; */
+  /* max-height: 80%; */
+
+}
+
+.time-group {
+  margin: 30px 0;
 }
 
 /*# sourceMappingURL=style.css.map */

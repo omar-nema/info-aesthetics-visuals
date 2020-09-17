@@ -1,41 +1,58 @@
 function getStyleProp(int){
     return int.toString() + "px"
 }
+canvas = d3.select('.canvas');
 
 document.addEventListener("DOMContentLoaded", function(){
-    canvas = d3.select('.canvas');
+    
 
     d3.csv('avgdaytest.csv', function(d){ 
+        newd = new Date(d['Created Date']);
+        newd.setMinutes(0);
         return {
             key: +d['Unique Key'],
             borough: d.Borough,
             zip: d.ZIP,
             city: d.City,
             createdDate: new Date(d['Created Date']),
-            time: new Date(d['Created Date']).getHours(),
+            timeInt: new Date(d['Created Date']).getHours(),
+            timeHour: newd.toLocaleTimeString(),
             complaintType: d['Complaint Type'],
             desc: d.Descriptor,
             resolution: d['Resolution Description']
         }
     }).then(function(data){
 
-        hours = [];
+        dataGrp = Array.from(d3.group(data, d => d.timeInt));
+        distinctTimes = dataGrp.map(d=> d[0]);
+        console.log(distinctTimes)
+        //add missing times for placeholder data
         for (var i = 0; i< 24; i++){
-            hours.push(i);
+            if (distinctTimes.indexOf(i) == -1){
+                //console.log(dataGrp)
+                dummyData = [i, [{timeInt: i, timeHour: i, complaintType: 'No data to display'}]]
+                //
+                dataGrp.push(dummyData);
+            }
         }
-        canvasHt = canvas.node().getBoundingClientRect().height;
+        //re-sort data now that we've manually inserted other info
+        dataGrp.sort((a,b) => parseInt(a[0]) - parseInt(b[0]))
+  
+
+
+
+        //group data by hour to generate separate divs
+       
+ 
+       //add hours that don't exist
+
+        canvasHt = d3.select('.canvas').node().getBoundingClientRect().height;
         canvasWidth = canvas.node().getBoundingClientRect().width;
-
-        // timeScale = d3.scaleLinear().domain([0, hours.length]).range([0, canvasHt]);
-        // axis = d3.axisLeft(timeScale);
-        // canvas.append('g').attr("transform", "translate(40,0)").call(axis);
-
-        let rectWidth = 120;
+        let rectWidth = 120, rectHeight = 30;
         var padding = 40;
+        var rowHt = 40;
         var numCols =  Math.ceil(canvasWidth/(rectWidth+padding));
         var numRows = Math.ceil(data.length/numCols);
-        var rowHt = Math.ceil(canvasHt/numRows);
-
         var xScale = d3.scaleLinear().domain([0, numCols]).range([0, canvasWidth]);
         var yScale = d3.scaleLinear().domain([0, numRows]).range([0, canvasHt])
 
@@ -46,64 +63,21 @@ document.addEventListener("DOMContentLoaded", function(){
             d.colNum = i % numCols;
             d.xVal = xScale(d.colNum);
             d.yVal = yScale(d.rowNum);
-        });
+        }); 
 
+        canvas.selectAll('.time-group').data(dataGrp).enter().append('div').attr('class', 'time-group').append('div').attr('class', 'time-header').text((d)=>  d[0]);
+        comps = canvas.selectAll('.time-group').selectAll('.comp').data(function(d){return d[1]}).enter().append('div').attr('class', function(d){
+            if (d.key){
+                return 'comp'
+            } else {
+                return 'dummy'
+            }
+        })
 
-        complaints = canvas.append('div').attr('class', 'complaints').selectAll('rect').data(data).enter();
-        compG = complaints.append('div')
-            .attr('class', 'complaint')
+        comps
             .style('width', getStyleProp(rectWidth))
-            .style('height', getStyleProp(rowHt*.6))
-            .style('background', 'blue')
-            .style('transform', function(d){
-                return 'translate(' + getStyleProp(d.xVal) + ',' + getStyleProp(d.yVal) + ')'
-            })
+            .style('height', getStyleProp(rectHeight))
             .append('div').attr('class', 'compText').text((d) => d.complaintType);
-            //.style('transform', (d) =>  console.log(d);
-            // .style('height', rowHt.toString())
-    
-            // .attr('x', (d) => d.xVal)
-            // .attr('y', (d) => d.yVal)
-
-         
-      
-        
-        // compG.append('div')
-        //     // .attr('fill', 'gray')
-        //     .attr('height', 30)
-        //     .attr('width', rectWidth)
-        //     .attr('x', 0)
-        //     .attr('y', 0)
-        // compG   
-        //     .append('text')
-            // .text(function(d){ return d.complaintType})
-        // rects.append('rect')
-        //     .attr('width', 30).attr('height', 10)
-        //     .attr('fill', 'blue')
-        //     .attr('x', 0)
-        //     .attr('y', (d) => timeScale(d.time))
-        //     .text(function(d){ return d.complaintType});
-          
-       
-
-
-        //get max num elements 
-        // xScale = d3.scaleLinear()
-
-        // dataTime = Array.from(d3.group(data, d => d.time));
-        // maxLen = 0;
-        // dataTime.filter(function(d){
-        //     if (d[1].length > maxLen){
-        //         console.log('dd')
-        //         maxLen = d[1].length
-        //     }
-        // })
-        // console.log(dataTime, maxLen)
-
-
-        // conts = canvas.selectAll('rect').data(data).enter();
-        // conts.append('rect');
-
 
 
     })
