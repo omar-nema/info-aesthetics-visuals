@@ -1,0 +1,78 @@
+
+* {
+  box-sizing: border-box;
+  font-family: 'Karla', 'sans-serif'
+}
+body {
+  /* height: 200px;
+  background: white; */
+  height: 99vh;
+  width:  99vw;
+  background: #f7f7ff;
+
+}
+.content {
+  width: 85%;
+  margin: auto;
+  padding-top: 15px;  
+  margin-bottom: 30px;
+}
+.canvas {
+  position: relative;
+}
+
+#container {
+  height: 2500px;
+  width: 100%;
+  border: 1px solid rgba(0,0,0,.2);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,.15);
+  margin: auto;
+  margin-top: 35px;
+  background: white;
+  padding: 30px;
+  display: flex;
+}
+#container .timeAxis {
+  height: 100%;
+  width: 100px;
+}
+#container .canvas {
+  flex-grow: 1;
+  height: 100%
+}
+
+text {
+  font-size: 8px;
+  fill: black;
+  color: black;
+}
+
+.header {
+  font-size: 34px;
+  font-weight: 700;
+}
+.data-selection {
+  font-size: 20px;
+}
+
+.complaint {
+  position: absolute;
+  border-radius: 25px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complaint .compText {
+  font-size: 12px;
+  color: white;
+  width: 80%;
+  text-align: center;
+  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
+  max-height: 80%;
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=style.css.map */
