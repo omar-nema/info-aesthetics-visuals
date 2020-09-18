@@ -4,11 +4,7 @@
   font-family: 'Karla', 'sans-serif'
 }
 body {
-  /* height: 200px;
-  background: white; */
-  /* height: 99vh;
-  width:  99vw; */
-  background: #f7f7ff;
+  background: #f5f5f5;
 
 }
 .content {
@@ -24,12 +20,12 @@ body {
 #container {
   height: auto;
   width: 100%;
-  /* border: 1px solid rgba(0,0,0,.2);
-  box-shadow: 0 1px 1px 0 rgba(0,0,0,.15); */
+  border: 1px solid rgba(0,0,0,.08);
+  /* box-shadow: 0 1px 1px 0 rgba(0,0,0,.15); */
   margin: auto;
   margin-top: 35px;
-  /* background: white; */
-  padding: 10px 0;
+  background: white;
+  padding: 0px 30px;
   display: flex;
   max-height: calc(100vh - 190px);
   overflow-y: auto;
@@ -60,16 +56,32 @@ text {
 
 .tooltip {
   position: absolute;			
-  text-align: center;			
-  width: 60px;					
-  height: 28px;					
-  padding: 2px;				
-  font: 12px sans-serif;		
-  background: lightsteelblue;	
+  width: auto;
+  max-width: 250px;					
+  height: auto;					
+  padding: 10px 15px;				
+  font-size: 12px;
+  background: black;	
   border: 0px;		
-  border-radius: 8px;			
   pointer-events: none;		
+  box-shadow: -1px 3px 3px 0 rgba(0,0,0,.2);
+  color: #d7d7d8;
+  line-height: 1.1rem;
+  transition: opacity .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+.tooltip .first {
+  margin-bottom: 7px;
+  color: white;
+  font-size: 14px;
+}
+.tooltip div {
+  margin-bottom: 5px;
+}
+.noreshighlight {
+  color: #f36969;
+  font-weight: 700;
+}
+
 
 .comp {
   border-radius: 25px;
@@ -82,12 +94,14 @@ text {
   vertical-align: bottom;
   background: blue;
   cursor: pointer;
+  position: relative;
   transition: box-shadow ease-in-out .15s, transform ease-in-out .15s;
 }
 .comp:hover {
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 23%);
   transform: scale(1.05)
 }
+
 
 .time-header {
   margin-bottom: 10px;
@@ -118,6 +132,23 @@ text {
 
 .time-group {
   margin: 30px 0;
+}
+
+.nores {
+  position: absolute;
+  top: -7px;
+  right: 0;
+  background: #ef1010;
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  /* box-shadow: 0 1px 1px 0 rgba(0,0,0,.1); */
+  /* border: 1px solid #820808; */
+  border: .5px solid white;
+  text-align: center;
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
 }
 
 /* width */

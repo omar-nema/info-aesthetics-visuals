@@ -2,7 +2,7 @@ function getStyleProp(int){
     return int.toString() + "px"
 }
 canvas = d3.select('.canvas');
-tooltip = canvas.append('div').attr('class', 'tooltip').style("opacity", 0);
+tooltip = d3.select('body').append('div').attr('class', 'tooltip').style("opacity", 0);
 
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -20,11 +20,15 @@ document.addEventListener("DOMContentLoaded", function(){
             timeInt: new Date(d['Created Date']).getHours(),
             timeHour: newd.toLocaleTimeString(),
             complaintType: d['Complaint Type'],
+            location: d['Location Type'],
             desc: d.Descriptor,
+            address: d['Incident Address'],
             mappedCategory: d.mappedCategory,
             resolution: d['Resolution Description']
         }
     }).then(function(data){
+
+        console.log(data)
 
         zipGroup = d3.group(data, d => d.zipBorough, d=> d.dayOfWeek)
         data = zipGroup.get('QUEENS (11385)').get(7);//ridgeWoodtest
@@ -36,7 +40,9 @@ document.addEventListener("DOMContentLoaded", function(){
         //get distinct categories to use for colors
         compTypes = Array.from(d3.group(data, d => d.mappedCategory));
         distinctComps = compTypes.map(d=> d[0]);
-        var colorScale = d3.scaleOrdinal().domain(distinctComps).range(d3.schemeCategory10);
+        colScheme = d3.schemeTableau10;
+        colScheme = ['rgb(89, 161, 79)', '#e6383a', '#c047c7', '#4593e6', '#2dcec6', '#7c47ad', '#555963', '#a52b74', '#2992ff', '#e0893f']
+        var colorScale = d3.scaleOrdinal().domain(distinctComps).range(colScheme);
     
         //add missing times for placeholder data
         for (var i = 0; i< 24; i++){
@@ -85,15 +91,27 @@ document.addEventListener("DOMContentLoaded", function(){
             });
             // .text((d)=>  '0' + d[0] + ':00');
         comps = canvas.selectAll('.time-group').selectAll('.comp').data(function(d){return d[1]}).enter().append('div')
-        .on('mouseover', function(e){
-            console.log(e);
-            tooltip.transition().duration(200).style("opacity", .9)
+        .on('click', function(e){
+            d = d3.select(this).data()[0]
+            console.log(d);
+            tooltip.transition().duration(200).style("opacity", .95)
             .style("left", (e.pageX) + "px")		
-            .style("top", (e.pageY - 28) + "px");
-            tooltip.text('OH MAMAMAMAM')		
+            .style("top", (e.pageY + 22) + "px");
+            firstline = '<div class="first"><strong>' + d.complaintType +'</strong></div>'
+            secondline =  '<div><strong>' + 'Description:</strong> ' + d.desc + '</div>';
+            var thirdline;
+            if (d.resolution != ''){
+                thirdline = '<div><strong>' + 'Resolution:</strong> ' + d.resolution +'</div>'
+            } else {
+                thirdline = '<div class="noreshighlight">No Resolution</div>'
+            }
+            fourth ='<div>' + '<strong>Location:</strong> ' + d.location + ' at ' + d.address+ '</div>';
+            
+            str = firstline + secondline + thirdline + fourth;
+            tooltip.html(str)		
         })
         .on('mouseout', function(){
-            tooltip.transition().duration(100).style("opacity", 0);	
+            tooltip.style("opacity", 0);	
         })
         .each(function(d){
             if (d.key){
@@ -102,6 +120,9 @@ document.addEventListener("DOMContentLoaded", function(){
             } else {
                 d3.select(this).attr('class', 'dummy');
             }     
+            if (d.resolution == ''){
+                d3.select(this).append('div').attr('class', 'nores').text('!')
+            }
         });
         comps
             .style('width', getStyleProp(rectWidth))
