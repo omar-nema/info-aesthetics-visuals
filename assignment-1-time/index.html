@@ -4,6 +4,13 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>sketch</title>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="./selectize.css"> -->
+
+    <!-- Include Choices CSS -->
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+        />
     <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
@@ -13,17 +20,53 @@
                 NYC 311 Complaints
             </h1>
         </div>
-        <div class="data-selection">
-            <div>On an average (Friday) in (11385 - Ridgewood) </div>
+        <div class="selection-container">
+            <h2>
+                Select Focus Area
+            </h2>
+            <div class="placehold">Select a ZIP code and day of week to view detailed 311 data</div>
+            <div class="data-selection">
+                <div class="zip-holder">
+                    <div class="label">ZIP Code</div>
+                    <select class="zip-select">
+                        <label for="zipsel">ZIP Code</label>
+                        <select name="zipsel" id="zipsel">
+                        </select>
+                    </select>
+                </div>
+                <div class="heatmap-holder">
+                    <div class="label">Day of Week</div>
+                    <div class="heatmap">
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>                                                                                                                                                
+                        <div class="day"></div>                         
+                    </div>
+                </div>
+
+            </div>
         </div>
+     
+   
         <div id="container">
+            <h2>
+                Complaint Detail
+            </h2>
             <div class="timeAxis"></div>
-            <div class="canvas"></div>
+            <div class="canvas">
+                <div class="placehold">Select ZIP and day of week to populate complaint detail</div>
+            </div>
         </div>
     </div>
 
 
 </body>
 </html>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="./selectize.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
 <script src='https://d3js.org/d3.v6.min.js'></script>
 <script src='./sketch.js'></script>

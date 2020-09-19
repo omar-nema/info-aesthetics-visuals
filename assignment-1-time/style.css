@@ -5,6 +5,7 @@
 }
 body {
   background: #f5f5f5;
+  overflow: hidden;
 
 }
 .content {
@@ -16,20 +17,42 @@ body {
 .canvas {
   position: relative;
 }
-
-#container {
+h2 {
+  margin-bottom: 15px;
+  font-size: 17px;
+}
+#container, .selection-container {
+  border: 1px solid rgba(0,0,0,.08);  
   height: auto;
   width: 100%;
-  border: 1px solid rgba(0,0,0,.08);
-  /* box-shadow: 0 1px 1px 0 rgba(0,0,0,.15); */
-  margin: auto;
-  margin-top: 35px;
   background: white;
-  padding: 0px 30px;
-  display: flex;
+  padding: 0px 30px;  
+  margin: auto;
+  border: 1px solid rgba(0,0,0,.08);
+  margin-bottom: 30px;
+  padding-top: 10px;
+  box-shadow: 0px 1px 3px 0px rgb(0 0 0 / 10%);
+}
+#container {
+  height: auto;
+  min-height: 400px;
   max-height: calc(100vh - 190px);
   overflow-y: auto;
+  transition: opacity 0.15s ease-in-out;
 }
+.placehold{
+  color: gray;
+  margin-bottom: 15px;
+}
+
+#container.disabled {
+  opacity: 0.5;
+}
+.selection-container {
+  padding: 30px;
+  padding-top: 0px;
+}
+
 /* #container .timeAxis {
   height: 100%;
   width: 100px;
@@ -45,6 +68,12 @@ text {
   fill: black;
   color: black;
 }
+.label {
+  font-size: 14px;
+  color: gray;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
 
 .header {
   font-size: 34px;
@@ -52,6 +81,32 @@ text {
 }
 .data-selection {
   font-size: 20px;
+  display: flex;
+  min-width: 300px;
+  min-height: 30px;
+}
+.day {
+  width: 42px;
+  height:42px;
+  cursor: pointer;
+  margin-right: 1.5px;
+  /* box-shadow: 0 1px 1px 0 rgb(0 0 0 / 0.1); */
+  border: 1px solid rgba(0,0,0,.1);
+  transition: ;
+}
+.day:hover {
+  border: 1.5px solid gray;
+}
+.day.selected {
+  border: 2px solid #151515;
+}
+.heatmap {
+  display: flex;
+  border-radius: 2px;
+
+}
+.zip-holder {
+  margin-right: 80px;
 }
 
 .tooltip {
@@ -79,6 +134,11 @@ text {
 }
 .noreshighlight {
   color: #f36969;
+  font-weight: 700;
+}
+
+.choices__inner {
+  background: white;
   font-weight: 700;
 }
 
@@ -149,6 +209,10 @@ text {
   color: white;
   font-weight: 700;
   font-size: 13px;
+}
+
+.choices {
+  width: 300px;
 }
 
 /* width */
