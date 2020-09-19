@@ -10,6 +10,19 @@ var selectedZip;
 var zipGroup;
 
 
+function plotAll(){
+    zg = zipGroup.get(selectedZip).get(selectedDay);
+    heatmap(selectedZip);
+    textStr = 'Complaint Detail: ' + selectedZip + ' on ' + getDayOfWeek(selectedDay);
+    d3.select('.detail-text').node().textContent = textStr;
+    draw(zg);
+
+}
+function getDayOfWeek(day){
+     dayTranslation = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    return dayTranslation[day-1]
+}
+
 function draw(data) {
     //grp data to make drawing by category easier
 
@@ -88,7 +101,16 @@ function draw(data) {
         }, function(d, i){return d.key});
 
 
-    comps.enter().append('div')
+    trans = d3.transition()
+        .duration(300)
+        .ease(d3.easeLinear)
+        .on('end', function(){
+            d3.selectAll('.comp')
+            .append('div').attr('class', 'compText').text((d) => d.mappedCategory);
+        })
+        ;
+    comps.enter()
+        .append('div')
         .on('click', function(e) {
             d = d3.select(this).data()[0]
             tooltip.transition().duration(200).style("opacity", .95)
@@ -116,17 +138,18 @@ function draw(data) {
                 d3.select(this).style('background', colorScale(d.mappedCategory))
             } 
             else {
-                d3.select(this).html('');
+                d3.select(this).html('No data to display');
                 d3.select(this).attr('class', 'dummy');
             }
             if (d.resolution == '') {
                 d3.select(this).append('div').attr('class', 'nores').text('!')
             }
         })
+        .transition(trans)
         .style('width', getStyleProp(rectWidth))
-        .style('height', getStyleProp(rectHeight))
-        .append('div').attr('class', 'compText').text((d) => d.mappedCategory);
-    comps.exit().transition().duration(300).remove();
+        .style('height', getStyleProp(rectHeight));
+    
+    comps.exit().transition().duration(100).style('width', 0).style('height', 0).remove();
 
     // d3.selectAll('.time-group').exit().remove();   
     // d3.selectAll('.comp').exit().remove();
@@ -134,7 +157,7 @@ function draw(data) {
 }
 
 function setSelectedDay(dayNum){
-    d3.selectAll('.day').classed('day', 'false');
+    d3.selectAll('.day').attr('class', 'day')
     d3.select(d3.selectAll('.day')['_groups'][0][dayNum-1]).classed('selected', true);
     selectedDay = dayNum;
 };
@@ -144,24 +167,32 @@ function filterByZip(zipBor){
 }
 
 function heatmap(data){
-    console.log(data, maxComplaints);
-
     data = Array.from(filterByZip(data));
     //d3.schemeReds
-    heatScale = d3.scaleLinear().domain([0, maxComplaints]).range(['lightgray', 'red']);
+    heatScale = d3.scaleLinear().domain([0, maxComplaints]).range(['white', 'red']);
     hmap = d3.select('.heatmap').selectAll('.day').data(data);
-    console.log(heatScale(50), heatScale(data[0][1].length))
     hmap.selectAll('.day').attr('background', 'white')
-    hmap.selectAll('.day')
+    hmap
         .style('background', d => heatScale(d[1].length))
         .on('click', function(d){
-            d3.selectAll('.day').classed('selected', 'false');
-            selectedDay = d3.select(this).data()[0] ;
-            d3.select(this).attr('class', 'day selected')
+            d3.selectAll('.day').attr('class', 'day')
+            selectedDay = d3.select(this).data()[0][0] ;
+            d3.select(this).classed('selected', true)
+            plotAll();
+        })
+        .on('mouseover', function(e){
+            tooltip.transition().duration(200).style("opacity", .95)
+                .style("left", (e.pageX) + "px")
+                .style("top", (e.pageY + 22) + "px");
+            numComplaints = d3.select(this).data()[0][1].length;
+            dayOfWeek = getDayOfWeek(d3.select(this).data()[0][0])
+            str = '<div>Number of complaints on ' + dayOfWeek + ': ' + numComplaints + '</div>'
+            tooltip.html(str)
+        })
+        .on('mouseout', function(d){
+            tooltip.style("opacity", 0);
         })
     ;
-    hmap.style('background', d => heatScale(d[1].length));
-    //maxComplaints
 }
 
 function calculateWeekAverages(data){
@@ -195,8 +226,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }).then(function(data) {
 
-        zipGroup = d3.group(data, d => d.zipBorough, d => d.dayOfWeek)
-
+        zipGroup = d3.group(data, d => d.zipBorough, d => d.dayOfWeek);
         //prep filter data
         boroughZips = Array.from(zipGroup.keys()); 
         days = [1,2,3,4,5,6,7];
@@ -214,12 +244,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         function getCurrZip(){
-         
             return document.querySelector('.zip-select').currentValue;
         }
-
-    
-
+        
         var zipSelect = new Choices(document.querySelector('.zip-select'), {
             silent: false,
             items: [],
@@ -227,27 +254,6 @@ document.addEventListener("DOMContentLoaded", function() {
             renderChoiceLimit: -1,
             maxItemCount: -1,
             addItems: true,
-            // addItemFilter: null,
-            // removeItems: true,
-            // removeItemButton: false,
-            // editItems: false,
-            // duplicateItemsAllowed: true,
-            // delimiter: ',',
-            // paste: true,
-            // searchEnabled: true,
-            // searchChoices: true,
-            // searchFloor: 1,
-            // searchResultLimit: 4,
-            // searchFields: ['label', 'value'],
-            // position: 'auto',
-            // resetScrollPosition: true,
-            // shouldSort: true,
-            // shouldSortItems: false,
-            // placeholder: true,
-            // placeholderValue: null,
-            // searchPlaceholderValue: null,
-            // prependValue: null,
-            // appendValue: null,
             renderSelectedChoices: 'auto',
             loadingText: 'Loading...',
             noResultsText: 'No results found',
@@ -255,24 +261,25 @@ document.addEventListener("DOMContentLoaded", function() {
             itemSelectText: ''
         })  
         selectedZip = zipSelect.getValue(true);
-        heatmap(selectedZip);
         setSelectedDay(1);
-        data = filterData(selectedZip, selectedDay);
-        draw(data);
+        plotAll();
 
         document.querySelector('.zip-select').addEventListener('change', function(e){
             selectedZip = zipSelect.getValue(true);
-            console.log(selectedZip)
-            heatmap(selectedZip);
-            data = filterData(selectedZip, selectedDay);
-            draw(data);
+            plotAll();
         })
-
-
-
-
-    
     
     })
 
 });
+
+
+
+
+        // data = filterData(selectedZip, selectedDay);
+        // draw(data);
+
+            // console.log(selectedZip)
+            // heatmap(selectedZip);
+            // data = filterData(selectedZip, selectedDay);
+            // draw(data);

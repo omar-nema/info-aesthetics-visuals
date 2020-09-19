@@ -5,7 +5,10 @@
     <title>sketch</title>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="./selectize.css"> -->
+  
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
     <!-- Include Choices CSS -->
         <link
         rel="stylesheet"
@@ -17,14 +20,16 @@
     <div class="content">
         <div class="header-row">
             <h1 class="header">
-                NYC 311 Complaints
+                NYC 311 Complaint Explorer
             </h1>
         </div>
         <div class="selection-container">
             <h2>
-                Select Focus Area
+                Choose a Neighborhood
             </h2>
-            <div class="placehold">Select a ZIP code and day of week to view detailed 311 data</div>
+            <div class="placehold">
+                On an average day in your neighborhood, what sort of complaints are filed? Select a ZIP code and day of week to find out!
+            </div>
             <div class="data-selection">
                 <div class="zip-holder">
                     <div class="label">ZIP Code</div>
@@ -37,13 +42,27 @@
                 <div class="heatmap-holder">
                     <div class="label">Day of Week</div>
                     <div class="heatmap">
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>                                                                                                                                                
-                        <div class="day"></div>                         
+                        <div class="day">
+                            <div class="day-label">Sun</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Mon</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Tue</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Wed</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Thu</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Fri</div>
+                        </div>
+                        <div class="day">
+                            <div class="day-label">Sat</div>
+                        </div>                                                                                                                                      
                     </div>
                 </div>
 
@@ -52,12 +71,12 @@
      
    
         <div id="container">
-            <h2>
+            <h2 class="detail-text">
                 Complaint Detail
             </h2>
             <div class="timeAxis"></div>
             <div class="canvas">
-                <div class="placehold">Select ZIP and day of week to populate complaint detail</div>
+                <div class="placehold">Select data point to reveal details behind complaint</div>
             </div>
         </div>
     </div>
